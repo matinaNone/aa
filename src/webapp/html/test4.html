@@ -1,0 +1,37 @@
+<html>
+<head>
+    <script src="../lib/react.min.js"></script>
+    <script src="../lib/react-dom.js"></script>
+    <script src="../lib/JSXTransformer.js"></script>
+
+</head>
+<body>
+<div id="example"></div>
+<script type="text/jsx">
+    var List = React.createClass({
+        render: function () {
+            return (
+                <ol>
+                    {
+                        React.Children.map(
+                            this.props.children, function (child) {
+                                return <li>{child}</li>
+                            }
+                        )
+                    }
+                </ol>
+            );
+        }
+    });
+    ReactDOM.render(
+            <List>
+                <span>hello</span>
+                <span>hello</span>
+                <span>hello</span>
+            </List>,
+        document.body
+    );
+</script>
+</body>
+</html>
+

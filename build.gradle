@@ -1,0 +1,53 @@
+group 'aa'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+ext {
+    vertxVersion = '3.4.2'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    maven {
+        url "http://repo1.maven.org/maven2/"
+    }
+}
+
+dependencies {
+    compile "io.vertx:vertx-core:$vertxVersion"
+    compile "io.vertx:vertx-codegen:$vertxVersion"
+    compile "io.vertx:vertx-web:$vertxVersion"
+    compile "io.vertx:vertx-web-client:$vertxVersion"
+    compile "io.vertx:vertx-unit:$vertxVersion"
+    compile "org.hsqldb:hsqldb:2.3.3"
+    compile "io.vertx:vertx-jdbc-client:$vertxVersion"
+    compile 'mysql:mysql-connector-java:6.0.2'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.orbitz.consul:consul-client:1.3.6'
+    compile 'junit.junit:4.8.1'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    compile "net.nisgits.gradle:gradle-executable-jar-plugin:master-REL-6"
+}
+
+
+jar{
+    String jarsString=''
+    configurations.runtime.each{jarsString = jarsString + "lib/"+ it.name + " "}
+    manifest{
+        attributes 'Main-Verticle': 'HelloWorldFromWeb'
+        attributes 'Main-Class': 'io.vertx.core.Launcher'
+        attributes 'Class-Path': jarsString
+    }
+}
+
+task copyJar(type: Copy){
+    from configurations.runtime
+    into('build/libs/lib')
+}
+task release(type:Copy, dependsOn:[build,copyJar]){
+}
+
